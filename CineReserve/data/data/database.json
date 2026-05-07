@@ -1,0 +1,80 @@
+{
+    "users": {
+        "enes12": "enes12",
+        "mehmet13": "mehmet13",
+        "ahmet14": "ahmet14",
+        "DOSYA AÇIK": "DOSYA"
+    },
+    "movies": {
+        "The Matrix": {
+            "total_seats": 50,
+            "available_seats": 50,
+            "description": "Bir bilgisayar korsanı olan Neo, gizemli isyancı Morpheus ile tanıştığında, dünyasının aslında bir bilgisayar programı olduğunu keşfeder. Gerçeği öğrendikten sonra insanlığın özgürlüğü için savaşmaya başlar.",
+            "trailer_url": "https:\/\/www.youtube.com\/embed\/vKQi3bBA1y8",
+            "reservations": []
+        },
+        "Inception": {
+            "total_seats": 100,
+            "available_seats": 100,
+            "description": "Rüya hırsızı Cobb, insanların bilinçaltından sırları çalmaktadır. Ona hayatını geri verebilecek son bir görev teklif edilir: Ancak bu sefer fikir çalmak değil, bir fikri bir zihne yerleştirmesi gerekmektedir.",
+            "trailer_url": "https:\/\/www.youtube.com\/embed\/YoHD9XEInc0",
+            "reservations": []
+        }
+    },
+    "requests": [
+        {
+            "movie_name": "Jujutsu Kaisen",
+            "user_name": "enes12",
+            "date": "2026-04-12 00:54:37"
+        },
+        {
+            "movie_name": "Jujutsu Kaisen",
+            "user_name": "enes12",
+            "date": "2026-04-12 01:05:51"
+        },
+        {
+            "movie_name": "Jujutsu Kaisen",
+            "user_name": "enes12",
+            "date": "2026-04-12 01:05:53"
+        },
+        {
+            "movie_name": "Jujutsu Kaisen",
+            "user_name": "mehmet13",
+            "date": "2026-04-12 01:06:03"
+        },
+        {
+            "movie_name": "Jujutsu Kaisen",
+            "user_name": "mehmet13",
+            "date": "2026-04-12 01:06:05"
+        },
+        {
+            "movie_name": "Transformers Karanlık",
+            "user_name": "ahmet14",
+            "date": "2026-04-12 01:06:37"
+        },
+        {
+            "movie_name": "Transformers Karanlık",
+            "user_name": "ahmet14",
+            "date": "2026-04-12 01:06:38"
+        },
+        {
+            "movie_name": "Transformers Karanlık",
+            "user_name": "ahmet14",
+            "date": "2026-04-12 01:06:40"
+        },
+        {
+            "movie_name": "Transformers Karanlık",
+            "user_name": "ahmet14",
+            "date": "2026-04-12 01:06:42"
+        },
+        {
+            "movie_name": "Transformers Karanlık",
+            "user_name": "mehmet13",
+            "date": "2026-04-12 01:06:51"
+        }
+    ],
+    "admins": [
+        "enes12",
+        "mehmet13"
+    ]
+}
