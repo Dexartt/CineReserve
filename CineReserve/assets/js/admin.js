@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadData() {
+    // Üç isteği aynı anda atıyorum ki sayfa daha hızlı yüklensin
     await Promise.all([
         loadAdminMovies(),
         loadAdminRequests(),
@@ -46,6 +47,7 @@ async function loadAdminRequests() {
         
         if (result.success) {
             const grouped = {};
+            // Birden fazla kişi aynı filmi istediyse onları birleştirip sayısını buluyorum
             result.data.forEach(req => {
                 const normName = req.movie_name.trim().toLowerCase();
                 if (!grouped[normName]) {
@@ -118,7 +120,9 @@ async function loadAdminUsers() {
     }
 }
 
+// Kullanıcının yetkisini değiştirmek için
 async function toggleAdminRole(username, makeAdmin) {
+    // Yanlışlıkla tıklanmasın diye emin misin mesajı çıkardım
     if (!confirm(`'${username}' adlı kullanıcıyı ${makeAdmin ? 'yönetici yapmak' : 'yöneticilikten çıkarmak'} istediğinize emin misiniz?`)) {
         return;
     }

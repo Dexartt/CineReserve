@@ -1,3 +1,4 @@
+// Sayfa yüklenmeden js çalışıp hata vermesin diye bu bloğun içine yazdım
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthState();
     loadMovies();
@@ -12,13 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnCancel').addEventListener('click', () => handleReservationAction('cancel'));
 });
 
-// Genel değişkenleri burada tutuyorum
+// Her yerde kullanacağım değişkenler
 let currentSelectedMovie = null;
 let currentSelectedSeat = null;
-let authAction = 'login'; // 'login' veya 'register' olarak değişiyor
+let authAction = 'login'; // Modal açıldığında formun 'login' mi yoksa 'register' mı olduğunu belirler
 let currentUser = null;
 
-// Giriş / Kayıt arayüz işlemleri
+// LocalStorage'a bakıyorum, adam giriş yapmışsa butonları falan ona göre değiştiriyorum
 function checkAuthState() {
     currentUser = localStorage.getItem('currentUser');
     const guestBar = document.getElementById('authGuest');
@@ -29,6 +30,9 @@ function checkAuthState() {
         guestBar.style.display = 'none';
         userBar.style.display = 'flex';
         document.getElementById('loggedInUsername').textContent = currentUser;
+
+        const myTicketsTabBtn = document.getElementById('myTicketsTabBtn');
+        if (myTicketsTabBtn) myTicketsTabBtn.style.display = 'inline-block';
 
         if (adminLinkBtn) {
             const isAdmin = localStorage.getItem('isAdmin');
@@ -41,6 +45,8 @@ function checkAuthState() {
     } else {
         guestBar.style.display = 'flex';
         userBar.style.display = 'none';
+        const myTicketsTabBtn = document.getElementById('myTicketsTabBtn');
+        if (myTicketsTabBtn) myTicketsTabBtn.style.display = 'none';
         if (adminLinkBtn) adminLinkBtn.style.display = 'none';
     }
 }
@@ -59,7 +65,9 @@ function closeAuthModal() {
     document.getElementById('authPassword').value = '';
 }
 
+// Kayıt ol / Giriş yap formunu gönderince burası çalışıyor
 async function handleAuthSubmit(e) {
+    // Sayfa yenilenmesin diye bunu koydum
     e.preventDefault();
     const username = document.getElementById('authUsername').value.trim();
     const password = document.getElementById('authPassword').value;
@@ -108,8 +116,9 @@ async function handleLogout() {
 }
 
 
-// Veritabanından filmleri vs. çektiğim API fonksiyonları
+// --- API İSTEKLERİ ---
 
+// Veritabanından filmleri çekmek için
 async function loadMovies() {
     try {
         const response = await fetch('../services/api.php?action=movies');
@@ -117,6 +126,7 @@ async function loadMovies() {
         if (result.success) {
             renderShowcase(result.data);
             renderMovies(result.data);
+            renderMyTickets(result.data);
         } else {
             showToast('Filmler yüklenemedi.', 'error');
         }
@@ -193,7 +203,8 @@ async function handleReservationAction(actionType) {
 }
 
 
-// HTML tarafına verileri basma işlemleri (Render)
+// --- EKRANA BASMA İŞLEMLERİ ---
+// Gelen verileri html'e dönüştürüp ekrana yerleştirdiğim kısım
 
 function renderShowcase(movies) {
     const list = document.getElementById('showcaseList');
@@ -229,9 +240,53 @@ function renderShowcase(movies) {
     });
 }
 
+// Kullanıcının satın aldığı biletleri ekrana basan fonksiyon
+function renderMyTickets(movies) {
+    const list = document.getElementById('myTicketsList');
+    if (!list) return;
+    list.innerHTML = '';
+    
+    if (!currentUser) {
+        list.innerHTML = '<p style="color:var(--text-secondary); text-align:center; grid-column: 1/-1;">Biletlerinizi görmek için giriş yapmalısınız.</p>';
+        return;
+    }
+
+    let hasTickets = false;
+
+    movies.forEach(movie => {
+        if (!movie.reservations) return;
+        
+        for (const seat in movie.reservations) {
+            const reservation = movie.reservations[seat];
+            if (reservation.user_name === currentUser) {
+                hasTickets = true;
+                const card = document.createElement('div');
+                card.className = 'showcase-card'; // Styling için showcase-card class'ı kullanıyoruz
+                // Güvenli escape işlemi
+                const escapedName = movie.name.replace(/'/g, "\\'");
+                
+                card.innerHTML = `
+                    <div class="showcase-info" style="padding: 1.5rem; text-align: center; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%;">
+                        <h3 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 1.5rem;">${movie.name}</h3>
+                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Koltuk No: <strong style="color: #fff; font-size: 1.4rem;">${seat}</strong></p>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Bilet Türü: ${reservation.ticket_type}</p>
+                        <button class="btn danger-btn small" onclick="openModal({name: '${escapedName}'}, ${seat}, true, {user_name: '${currentUser}', ticket_type: '${reservation.ticket_type}'})">Bileti İptal Et</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            }
+        }
+    });
+
+    if (!hasTickets) {
+        list.innerHTML = '<p style="color:var(--text-secondary); text-align:center; grid-column: 1/-1;">Henüz satın aldığınız bir bilet bulunmamaktadır.</p>';
+    }
+}
+
+// Filmleri ve koltukları ekrana çizen yer
 function renderMovies(movies) {
     const moviesList = document.getElementById('moviesList');
-    moviesList.innerHTML = '';
+    moviesList.innerHTML = ''; // İçini temizliyorum ki iki defa basmasın
 
     if (movies.length === 0) {
         moviesList.innerHTML = '<p style="color:var(--text-secondary); grid-column: 1/-1; text-align:center;">Vizyonda film yok.</p>';
@@ -239,6 +294,7 @@ function renderMovies(movies) {
     }
 
     movies.forEach(movie => {
+        // Her film için bir tane kutu (div) oluşturuyorum
         const card = document.createElement('div');
         card.className = 'movie-card';
 
@@ -260,7 +316,16 @@ function renderMovies(movies) {
             const reservation = movie.reservations[i];
             const isBooked = reservation !== undefined;
             
-            seatWrapper.className = `seat ${isBooked ? 'booked' : ''}`;
+            if (isBooked) {
+                if (reservation.user_name === currentUser) {
+                    seatWrapper.className = 'seat my-booked';
+                } else {
+                    seatWrapper.className = 'seat booked';
+                }
+            } else {
+                seatWrapper.className = 'seat';
+            }
+
             seatWrapper.textContent = i;
             
             if (isBooked) {
@@ -340,9 +405,9 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// Sekmeler (Tab) arası geçiş yapma mevzusu
+// Menüdeki butonlara basınca sekmeleri değiştiren fonksiyon
 function switchTab(tabId) {
-    // Önce bütün sekmeleri gizliyorum
+    // Önce hepsini gizliyorum
     document.querySelectorAll('.tab-content').forEach(section => {
         section.classList.remove('active');
     });

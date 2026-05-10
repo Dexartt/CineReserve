@@ -1,20 +1,23 @@
 <?php
+// Admin giriş yaptıysa hafızada tutsun diye session açıyorum
 session_start();
 
 // Hocaya projeyi gösterirken admin paneli için kullanacağım şifre bu
 $ADMIN_PASSWORD = "enes123";
 
-// Session'ı bitirip çıkış yaptığım yer
+// Çıkış butonuna basılırsa
 if (isset($_GET['logout'])) {
+    // Çıkış yaptırıp sayfayı yeniletiyorum
     session_destroy();
     header("Location: admin.php");
     exit;
 }
 
 $error_msg = "";
-// Admin şifresi doğru mu diye kontrol ettiğim kısım
+// Forma girilen şifre doğru mu diye bakıyorum
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_pass'])) {
     if ($_POST['admin_pass'] === $ADMIN_PASSWORD) {
+        // Şifre tamamsa giriş başarılı diyorum
         $_SESSION['admin_logged_in'] = true;
         header("Location: admin.php");
         exit;
@@ -23,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_pass'])) {
     }
 }
 
+// Giriş yapılmış mı diye her yerde kullanmak için değişken oluşturdum
 $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 ?>
 <!DOCTYPE html>
@@ -112,7 +116,7 @@ $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_i
         <main>
             <?php if(!$is_logged_in): ?>
                 
-                <!-- GİRİŞ FORMU KISMI -->
+                <!-- Şifre girme ekranı (henüz giriş yapılmadıysa burası gözükecek) -->
                 <div class="admin-card login-container">
                     <h2>Yönetici Girişi</h2>
                     <?php if($error_msg): ?>
@@ -129,7 +133,7 @@ $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_i
 
             <?php else: ?>
 
-                <!-- YÖNETİM PANELİ İÇERİĞİ -->
+                <!-- Admin paneli (şifre doğru girildiyse burası açılıyor) -->
                 <div class="admin-grid">
                     
                     <!-- FİLM EKLEME FORMU -->
@@ -189,7 +193,7 @@ $is_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_i
 
     <div id="toast" class="toast">Mesaj</div>
 
-    <!-- JavaScript dosyasını sadece admin girişi yapıldıysa yüklüyorum ki arka planda boşuna hata vermesin -->
+    <!-- Admin dosyasını sadece giriş yapıldıysa çağırıyorum ki boşuna hata basmasın -->
     <?php if($is_logged_in): ?>
         <script src="../../assets/js/admin.js"></script>
     <?php endif; ?>

@@ -1,3 +1,4 @@
+/* Renkleri tek tek yazmak yerine buraya değişken olarak koydum, değiştirmesi kolay olsun diye */
 :root {
     --bg-color: #0b0f19;
     --panel-bg: rgba(22, 28, 45, 0.7);
@@ -11,6 +12,8 @@
     --seat-available: rgba(255, 255, 255, 0.1);
     --seat-booked: rgba(229, 9, 20, 0.2);
     --seat-booked-border: #e50914;
+    --seat-my-booked: rgba(16, 185, 129, 0.2);
+    --seat-my-booked-border: #10b981;
 }
 
 * {
@@ -88,7 +91,7 @@ header p {
     font-size: 1.1rem;
 }
 
-/* Glassmorphism Classes */
+/* Arkası hafif bulanık dursun diye cam efekti yaptım */
 .glass-panel {
     background: var(--panel-bg);
     backdrop-filter: blur(12px);
@@ -99,9 +102,10 @@ header p {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Trailer Showcase */
+/* Fragmanların olduğu kısım */
 .showcase-grid {
     display: grid;
+    /* Ekran küçülünce kutular alta kaysın diye auto-fit kullandım */
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
 }
@@ -267,6 +271,7 @@ input:focus, select:focus {
 .seats-container {
     padding: 2rem;
     display: grid;
+    /* Koltuklar ekrana sığdığı kadar yan yana dizilsin diye */
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     gap: 0.8rem;
     justify-content: center;
@@ -283,6 +288,8 @@ input:focus, select:focus {
 .seat:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
 .seat.booked { background: var(--seat-booked); border-color: var(--seat-booked-border); color: var(--accent); }
 .seat.booked:hover { box-shadow: 0 0 15px rgba(229, 9, 20, 0.4); }
+.seat.my-booked { background: var(--seat-my-booked); border-color: var(--seat-my-booked-border); color: var(--success); }
+.seat.my-booked:hover { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
 
 /* Modal */
 .modal {
@@ -328,6 +335,7 @@ input:focus, select:focus {
 .toast.success { border-left-color: var(--success); }
 .toast.error { border-left-color: var(--danger); }
 
+/* Telefondan girilirse tasarım bozulmasın diye burayı ekledim */
 @media (max-width: 768px) {
     #addMovieForm { grid-template-columns: 1fr; }
     .showcase-grid { grid-template-columns: 1fr; }

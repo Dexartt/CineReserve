@@ -1,5 +1,7 @@
 <?php
+// Kim giriş yapmış bilmek için
 session_start();
+// JS ile rahat anlaşsınlar diye verileri json olarak yolluyorum
 header('Content-Type: application/json');
 
 $host = 'localhost';
@@ -8,11 +10,12 @@ $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
 
+// Veritabanına bağlanma ayarları (güvenli olsun diye pdo kullandım)
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // verileri dizi olarak almak için
+    PDO::ATTR_EMULATE_PREPARES   => false, // sql açıklarına karşı önlem
 ];
 
 try {
@@ -25,7 +28,7 @@ try {
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-// JavaScript'ten gelen verileri alıyorum (Genelde JSON olarak atıyorum)
+// Ön taraftan (js'den) gelen verileri burada yakalıyorum
 $inputJSON = file_get_contents('php://input');
 $input = json_decode($inputJSON, TRUE);
 if (!$input && $requestMethod == 'POST') {
@@ -40,6 +43,7 @@ switch ($action) {
         $username = $input['username'] ?? '';
         $password = $input['password'] ?? '';
         
+        // Direk değişkeni sql'e yazmadım (?) koydum ki veritabanı hacklenmesin
         $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?');
         $stmt->execute([$username]);
         $userObj = $stmt->fetch();
@@ -279,5 +283,6 @@ switch ($action) {
         break;
 }
 
+// Sonucu js'e gönderiyorum. türkçe harfler bozulmasın diye unescaped_unicode ekledim
 echo json_encode($response, JSON_UNESCAPED_UNICODE);
 ?>

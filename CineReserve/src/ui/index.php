@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+<!-- Sayfa dili Türkçe olsun diye tr yaptık -->
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineReserve - Premium Sinema Sistemi</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=1.1">
 </head>
 <body>
     <div class="overlay"></div>
     
-    <!-- En üstteki giriş yap / kayıt ol barı -->
+    <!-- Sağ üstteki giriş yap/kayıt ol kısmı -->
     <div class="auth-bar container">
         <div id="authGuest" class="auth-group">
             <button class="btn ghost-btn" onclick="openAuthModal('login')">Giriş Yap</button>
@@ -33,10 +34,11 @@
         </header>
 
         <main>
-            <!-- Menü sekmeleri (Tablar) burada duruyor -->
+            <!-- Burası ortadaki butonlar. Tıklayınca sayfa yenilenmeden alt kısım değişiyor (js ile yaptım) -->
             <div class="tabs-nav">
                 <button class="tab-btn active" onclick="switchTab('tab-showcase')">Vizyondaki Filmler (Fragman & Bilgi)</button>
                 <button class="tab-btn" onclick="switchTab('tab-booking')">Bilet Alım & Koltuk Seçimi</button>
+                <button class="tab-btn" id="myTicketsTabBtn" onclick="switchTab('tab-tickets')" style="display: none;">Biletlerim</button>
                 <button class="tab-btn" onclick="switchTab('tab-admin')">Film Talep Et</button>
             </div>
 
@@ -50,6 +52,12 @@
             <section id="tab-booking" class="tab-content movies-container" style="margin-top: 2rem;">
                 <h2 class="section-title">Koltuk Seçimi ve Bilet Alış</h2>
                 <div id="moviesList" class="movies-grid"></div>
+            </section>
+
+            <!-- Biletlerim Sekmesi -->
+            <section id="tab-tickets" class="tab-content movies-container" style="margin-top: 2rem;">
+                <h2 class="section-title">Satın Aldığım Biletler</h2>
+                <div id="myTicketsList" class="showcase-grid"></div>
             </section>
 
             <!-- 3. Sekme: Kullanıcının yeni film istediği form alanı -->
@@ -68,7 +76,7 @@
 
         </main>
         
-        <!-- Giriş veya kayıt ol denildiğinde ekrana açılan pencere (Modal) -->
+        <!-- Giriş yap veya kayıt ol butonuna basınca üstten inen ekran -->
         <div id="authModal" class="modal">
             <div class="modal-content glass-panel" style="max-width: 400px;">
                 <span class="close-btn" onclick="closeAuthModal()">&times;</span>
@@ -125,6 +133,6 @@
     <!-- Sağ altta yeşil/kırmızı çıkan bildirim mesajları (Toast) -->
     <div id="toast" class="toast">Mesaj</div>
 
-    <script src="../../assets/js/app.js"></script>
+    <script src="../../assets/js/app.js?v=1.1"></script>
 </body>
 </html>
