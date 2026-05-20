@@ -1,0 +1,390 @@
+/* Renkleri tek tek yazmak yerine buraya değişken olarak koydum, değiştirmesi kolay olsun diye */
+:root {
+    --bg-color: #0b0f19;
+    --panel-bg: rgba(22, 28, 45, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --accent: #e50914; /* Cinema Red */
+    --accent-hover: #f40612;
+    --success: #10b981;
+    --danger: #ef4444;
+    --seat-available: rgba(255, 255, 255, 0.1);
+    --seat-booked: rgba(229, 9, 20, 0.2);
+    --seat-booked-border: #e50914;
+    --seat-my-booked: rgba(16, 185, 129, 0.2);
+    --seat-my-booked-border: #10b981;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(229, 9, 20, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.05), transparent 25%);
+    background-attachment: fixed;
+}
+
+h1, h2, h3, .logo {
+    font-family: 'Outfit', sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* Auth Bar */
+.auth-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: -1rem;
+    background: rgba(0,0,0,0.2);
+}
+
+.auth-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.welcome-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.welcome-text strong {
+    color: var(--text-primary);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.logo {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+}
+
+.logo span:not(.icon) {
+    color: var(--accent);
+}
+
+header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Arkası hafif bulanık dursun diye cam efekti yaptım */
+.glass-panel {
+    background: var(--panel-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Fragmanların olduğu kısım */
+.showcase-grid {
+    display: grid;
+    /* Ekran küçülünce kutular alta kaysın diye auto-fit kullandım */
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.showcase-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.showcase-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+}
+
+.showcase-info {
+    padding: 1.5rem;
+}
+
+.showcase-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.showcase-info p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Forms */
+.form-container h2 {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#addMovieForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: end;
+}
+#addMovieForm button {
+    grid-column: 1 / -1;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+input, select {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+    appearance: none;
+}
+
+select option {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+
+input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2);
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.primary-btn { background: var(--accent); color: white; }
+.primary-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 20px -10px var(--accent); }
+
+.ghost-btn { background: transparent; color: var(--text-primary); border: 1px solid var(--glass-border); }
+.ghost-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+.danger-text { color: var(--danger); }
+
+.success-btn { background: var(--success); color: white; }
+.danger-btn { background: var(--danger); color: white; }
+
+.success-btn:hover { background: #059669; transform: translateY(-2px); }
+.danger-btn:hover { background: #dc2626; transform: translateY(-2px); }
+
+.w-100 { width: 100%; }
+
+/* Movies Section */
+.movies-container { margin-top: 4rem; }
+
+.section-title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.movies-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.movie-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.movie-title { font-size: 1.5rem; font-weight: 700; }
+
+.seat-stats {
+    display: flex; gap: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);
+}
+.stat-item strong { color: var(--text-primary); font-size: 1.1rem; }
+
+.seats-container {
+    padding: 2rem;
+    display: grid;
+    /* Koltuklar ekrana sığdığı kadar yan yana dizilsin diye */
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.seat {
+    aspect-ratio: 1;
+    border-radius: 8px 8px 4px 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--seat-available); border: 1px solid transparent;
+}
+.seat:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
+.seat.booked { background: var(--seat-booked); border-color: var(--seat-booked-border); color: var(--accent); }
+.seat.booked:hover { box-shadow: 0 0 15px rgba(229, 9, 20, 0.4); }
+.seat.my-booked { background: var(--seat-my-booked); border-color: var(--seat-my-booked-border); color: var(--success); }
+.seat.my-booked:hover { box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
+/* Modal */
+.modal {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 100;
+    align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+}
+.modal.active { display: flex; opacity: 1; }
+
+.modal-content {
+    width: 90%; max-width: 450px; position: relative; transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modal.active .modal-content { transform: scale(1); }
+
+.close-btn {
+    position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem;
+    color: var(--text-secondary); cursor: pointer; transition: color 0.2s;
+}
+.close-btn:hover { color: white; }
+
+.seat-info { margin: 1.5rem 0; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center; }
+.highlight { font-size: 1.5rem; font-weight: 700; color: var(--accent); display: block; margin-top: 5px; }
+
+.status-badge {
+    margin-top: 10px; display: inline-block; padding: 0.3rem 0.8rem;
+    border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+}
+.status-available { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.status-booked { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+.modal-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.modal-actions .btn { flex: 1; }
+
+/* Toast */
+.toast {
+    position: fixed; bottom: 30px; right: 30px; background: var(--panel-bg);
+    border-left: 4px solid var(--accent); padding: 1rem 1.5rem; border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; transform: translateX(150%);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast.show { transform: translateX(0); }
+.toast.success { border-left-color: var(--success); }
+.toast.error { border-left-color: var(--danger); }
+
+/* Telefondan girilirse tasarım bozulmasın diye burayı ekledim */
+@media (max-width: 768px) {
+    #addMovieForm { grid-template-columns: 1fr; }
+    .showcase-grid { grid-template-columns: 1fr; }
+    .tabs-nav { flex-direction: column; }
+}
+
+/* Tabs */
+.tabs-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: var(--panel-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 10px 20px -10px var(--accent);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
